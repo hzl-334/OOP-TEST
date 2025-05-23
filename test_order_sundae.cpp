@@ -10,7 +10,7 @@ using namespace std;
 
 #include "Order.hpp"
 #include "Ingredients.hpp"
-#include "Toppings.hpp"
+#include "Topping.hpp"
 
 TEST_CASE("Order correctly stores data", "[Order]") {
     ToppingList toppingList;

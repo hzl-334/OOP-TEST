@@ -6,7 +6,7 @@
 using namespace std; 
 
 #include "Ingredients.hpp"
-#include "Toppings.hpp"
+#include "Topping.hpp"
 
 class Order {
 private:
@@ -29,8 +29,11 @@ public:
 
     string getFlavor() const { return flavor; }
     string getSize() const { return size; }
-    string getToppingName() const { return topping->getName(); }
+    // string getToppingName() const { return topping->getName(); }
     string getToppingType() const { return topping->getType(); }
+    // dereferences the unique_ptr<Topping> and returns a string
+    string getToppingName() const {return topping->getName();  // This converts the pointer to a string via its method
+}
 };
 
 class Sundae {
@@ -48,16 +51,19 @@ public:
         cout << "Choose flavor (Vanilla, Chocolate, Strawberry): ";
         getline(cin, flavor);
 
-        cout << "Choose topping (randomly assigned for now): \n";
-        topping = toppingList.getRandomTopping();  // Could be player-picked later
-        cout << "  → You got: " << topping->getName() << " (" << topping->getType() << ")\n";
-
+        cout << "Choose topping (Oreos,Sprinkles,Cherry): \n";
+        // topping = toppingList.getRandomTopping();  // Could be player-picked later
+        // cout << "  → You got: " << topping->getName() << " (" << topping->getType() << ")\n";
+        string toppingInput; 
+        getline(cin, toppingInput);
         cout << "Choose size (Small, Medium, Large): ";
         getline(cin, size);
     }
 
     string getFlavor() const { return flavor; }
     string getSize() const { return size; }
-    string getToppingName() const { return topping->getName(); }
+    // string getToppingName() const { return topping->getName(); }//returns pointer not string
+
+string getToppingName() const {return topping->getName();}
     string getToppingType() const { return topping->getType(); }
 };
