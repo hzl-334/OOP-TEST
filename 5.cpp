@@ -9,28 +9,7 @@ using namespace std;
 #include "Topping.hpp"
 #include "Order.hpp"
 #include "Customer.hpp"
-
-// //customer class 
-// class Customer {
-// private: 
-//     string name;
-//     int id; 
-//     unique_ptr<Order>; 
-
-// public: 
-//     Customer(string n,int i):name(n),id(i),order(make_unique<Order>(
-//         getRandomFlavor(),
-//         getRandomTopping(),
-//         getRandomSize()
-//     )){}
-//     void showOrder() const {
-//         cout << "\nCustomer #" << id << " - " << name << "'s Order:\n";
-//         order->show();
-//     }
-//     string getRandom(vector<string> options) {
-//         return options[rand() % options.size()];
-//     }
-// };
+#include "PlayerLevel.hpp"
 
 class Game {
     //add functionality to save/upload game
@@ -44,9 +23,15 @@ public:
 
         Sundae sundae;
         sundae.build();
-
+ 
+//score calc so far out of 3
         int score = calculateScore(customer, sundae);
         cout << "\nYou scored: " << score << "/3\n";
+
+        PlayerLevel playerlevel; 
+
+        playerlevel.addXP(score * 40);  // so far have 40 for score
+        playerlevel.showStatus();       // show level and the xp
 
         if (score == 3) {
             cout << "Perfect sundae! Great job!\n";

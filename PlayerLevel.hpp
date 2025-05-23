@@ -31,7 +31,7 @@ void addXP(int amount) {
     int getXPToNext() const { return level*100; }
 
     void showStatus() const {
-        cout << "Level: " << level << " | XP: " << xp << "/" << xpToNextLevel << "\n";
+        cout << "Level: " << level << " | XP until next level: " << xp << "/" << getXPToNext() << "\n";
     }
 
 };
