@@ -5,9 +5,15 @@ public:
     virtual string getCategory() const = 0;
     virtual ~Ingredient() {}
 };
-//mixins 
+// //mixins 
+// class MixIns:public Ingredient{
 
-//syrups 
+// }; 
+
+// //syrups 
+// class Syrup:public Ingredient{
+
+// }; 
 
 //topping class
 class Topping : public Ingredient {
@@ -37,19 +43,18 @@ public:
     string getType() const override { return "Sweet topping"; }
 };
 
-//toppingslist
 class ToppingList {
 private:
     vector<function<unique_ptr<FruitTopping>()>> fruitOptions;
     vector<function<unique_ptr<SweetTopping>()>> sweetOptions;
 
 public:
-    ToppingFactory() {
-        fruitOptions.push_back([]() { return make_unique<Banana>(); });
-        fruitOptions.push_back([]() { return make_unique<Cherry>(); });
+    ToppingList() {
+        fruitOptions.push_back([]() { return make_unique<FruitTopping>("Banana"); });
+        fruitOptions.push_back([]() { return make_unique<FruitTopping>("Cherry"); });
 
-        sweetOptions.push_back([]() { return make_unique<Sprinkles>(); });
-        sweetOptions.push_back([]() { return make_unique<Oreos>(); });
+        sweetOptions.push_back([]() { return make_unique<SweetTopping>("Sprinkles"); });
+        sweetOptions.push_back([]() { return make_unique<SweetTopping>("Oreos"); });
     }
 
     unique_ptr<Topping> getRandomFruitTopping() const {
@@ -59,23 +64,18 @@ public:
 
     unique_ptr<Topping> getRandomSweetTopping() const {
         int index = rand() % sweetOptions.size();
-        return sweetConstructors[index]();
-    }
-
-unique_ptr<Topping> getRandomFruitTopping() const {
-        int index = rand() % fruitOptions.size();
-        return fruitOptions[index]();
-    }
-
-unique_ptr<Topping> getRandomSweetTopping() const {
-        int index = rand() % sweetOptions.size();
         return sweetOptions[index]();
     }
 
     unique_ptr<Topping> getRandomTopping() const {
         vector<function<unique_ptr<Topping>()>> all;
-        for (const auto& f : fruitOptions) all.push_back(f);
-        for (const auto& s : sweetOptions) all.push_back(s);
+
+        for (const auto& f : fruitOptions)
+            all.push_back([=]() { return f(); });
+
+        for (const auto& s : sweetOptions)
+            all.push_back([=]() { return s(); });
+
         int index = rand() % all.size();
         return all[index]();
     }
