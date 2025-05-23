@@ -65,11 +65,8 @@ public:
     // string getToppingName() const { return topping->getName(); }//returns pointer not string
 
 
-// defensive programming 
-string getToppingName() const {
-    return topping ? topping->getName() : "None";}
-
-string getToppingType() const {
-    return topping ? topping->getType() : "Unknown";}
+// defensive programming
+string getToppingName() const {return topping ? topping->getName() : "None";}
+string getToppingType() const {return topping ? topping->getType() : "Unknown";}
 
 };
