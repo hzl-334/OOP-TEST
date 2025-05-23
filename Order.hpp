@@ -64,6 +64,12 @@ public:
     string getSize() const { return size; }
     // string getToppingName() const { return topping->getName(); }//returns pointer not string
 
-string getToppingName() const {return topping->getName();}
-    string getToppingType() const { return topping->getType(); }
+
+// defensive programming 
+string getToppingName() const {
+    return topping ? topping->getName() : "None";}
+
+string getToppingType() const {
+    return topping ? topping->getType() : "Unknown";}
+
 };
