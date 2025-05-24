@@ -3,7 +3,8 @@
 #include <vector>
 #include <cstdlib>
 #include <ctime>
-using namespace std; 
+#include <memory>
+using namespace std;
 
 #include "Ingredients.hpp"
 #include "Topping.hpp"
@@ -11,27 +12,43 @@ using namespace std;
 #include "Customer.hpp"
 #include "PlayerLevel.hpp"
 
+int Customer::nextID = 1;
+
 class Game {
-    //add functionality to save/upload game
 public:
     void play() {
         srand(time(0));  // Seed RNG
-        cout << "Welcome to Papa's Freezeria!\n";
+        cout << "Welcome to Papa's Freezeria!\n\n";
 
-        Customer customer("Ben",1);
-        customer.showOrder();
+        // Day 1: Tutorial + Starter + Post-Tutorial customers
+        vector<Customer> customers = {
+            {"Mandi", "Tutorial", "Day 1"},
+            {"Tony", "Post-Tutorial", "Day 1"},
+            {"Alberto", "Starter", "Day 1"},
+            {"Penny", "Starter", "Day 1"},
+            {"Lisa", "Starter", "Day 1"},
+            {"Matt", "Starter", "Day 1"},
+            {"Wally", "Starter", "Day 1"}
+        };
+
+        // Generate unique orders for each customer
+        for (auto& customer : customers) {
+            customer.generateOrder();
+        }
+
+        // Simulate taking and building sundae for the first customer
+        Customer& currentCustomer = customers[0];
+        currentCustomer.getOrder().show();
 
         Sundae sundae;
         sundae.build();
- 
-//score calc so far out of 3
-        int score = calculateScore(customer, sundae);
+
+        int score = calculateScore(currentCustomer, sundae);
         cout << "\nYou scored: " << score << "/3\n";
 
-        PlayerLevel playerlevel; 
-
-        playerlevel.addXP(score * 40);  // so far have 40 for score
-        playerlevel.showStatus();       // show level and the xp
+        PlayerLevel playerlevel;
+        playerlevel.addXP(score * 40);
+        playerlevel.showStatus();
 
         if (score == 3) {
             cout << "Perfect sundae! Great job!\n";
@@ -40,16 +57,21 @@ public:
         } else {
             cout << "Better luck next time.\n";
         }
+
+        cout << "\nRemaining customers today:\n";
+        for (size_t i = 1; i < customers.size(); ++i) {
+            cout << "- " << customers[i].getName() << " (ID: " << customers[i].getID() << ")\n";
+        }
     }
 
 private:
-    int calculateScore(Customer& customer, Sundae& sundae) {
-        int score = 0;
-        if (equalIgnoreCase(customer.getFlavor(), sundae.flavor)) score++;
-        if (equalIgnoreCase(customer.getToppingName(), sundae.getToppingName())) score++;
-        if (equalIgnoreCase(customer.getSize(), sundae.size)) score++;
-        return score;
-    }
+   int calculateScore(Customer& customer, Sundae& sundae) {
+    int score = 0;
+    if (equalIgnoreCase(customer.getOrder().getFlavor(), sundae.getFlavor())) score++;
+    if (equalIgnoreCase(customer.getOrder().getToppingName(), sundae.getToppingName())) score++;
+    if (equalIgnoreCase(customer.getOrder().getSize(), sundae.getSize())) score++;
+    return score;
+}
 
     bool equalIgnoreCase(string a, string b) {
         if (a.size() != b.size()) return false;
@@ -60,9 +82,8 @@ private:
     }
 };
 
-int main(){
+int main() {
     Game game;
     game.play();
     return 0;
-
 }
