@@ -7,11 +7,19 @@
 #include <string> 
 using namespace std; 
 
+#include "Ingredients.hpp"
 //topping class
 class Topping : public Ingredient {
+protected: 
+int unlockLevel; 
+
 public:
-    virtual string getType() const = 0;  
+    Topping(int level) : unlockLevel(level) {}
+    // virtual string getType() const = 0;  //in ingredients class
+
     string getCategory() const override { return "Topping"; }
+    int getUnlockLevel() const { return unlockLevel; }
+    virtual ~Topping() {}
 };
 
 //different toppings subclass 
@@ -20,9 +28,9 @@ private:
     string name;
 
 public:
-    FruitTopping(string n) : name(n) {}
+    FruitTopping(string n, int level) : Topping(level), name(n) {}
     string getName() const override { return name; }
-    string getType() const override { return "Fruit topping"; }
+    string getType() const override{ return "Fruit topping"; }
 };
 
 class SweetTopping : public Topping {
@@ -30,9 +38,9 @@ private:
     string name;
 
 public:
-    SweetTopping(string n) : name(n) {}
-    string getName() const override { return name; }
-    string getType() const override { return "Sweet topping"; }
+    SweetTopping(string n, int level) : Topping(level), name(n) {}
+    string getName() const override  { return name; }
+    string getType() const override  { return "Sweet topping"; }
 };
 
 class ToppingList {
@@ -42,11 +50,12 @@ private:
 
 public:
     ToppingList() {
-        fruitOptions.push_back([]() { return make_unique<FruitTopping>("Banana"); });
-        fruitOptions.push_back([]() { return make_unique<FruitTopping>("Cherry"); });
+        fruitOptions.push_back([]() { return make_unique<FruitTopping>("Banana",1); });
+        fruitOptions.push_back([]() { return make_unique<FruitTopping>("Cherry",2); });
 
-        sweetOptions.push_back([]() { return make_unique<SweetTopping>("Sprinkles"); });
-        sweetOptions.push_back([]() { return make_unique<SweetTopping>("Oreos"); });
+        sweetOptions.push_back([]() { return make_unique<SweetTopping>("SourPatches",5);}); 
+        sweetOptions.push_back([]() { return make_unique<SweetTopping>("Sprinkles",2); });
+        sweetOptions.push_back([]() { return make_unique<SweetTopping>("Oreos",1); });
     }
 
     unique_ptr<Topping> getRandomFruitTopping() const {
@@ -71,4 +80,27 @@ public:
         int index = rand() % all.size();
         return all[index]();
     }
+    unique_ptr<Topping> getRandomToppingForLevel(int playerLevel) const {
+    vector<function<unique_ptr<Topping>()>> available;
+
+    for (const auto& f : fruitOptions) {
+        auto topping = f();  // create one temporarily to check unlockLevel
+        if (playerLevel >= topping->getUnlockLevel()) {
+            available.push_back([f]() { return f(); });
+        }
+    }
+
+    for (const auto& s : sweetOptions) {
+        auto topping = s();
+        if (playerLevel >= topping->getUnlockLevel()) {
+            available.push_back([s]() { return s(); });
+        }
+    }
+
+    if (available.empty()) return nullptr;
+
+    int index = rand() % available.size();
+    return available[index]();
+}
+
 };

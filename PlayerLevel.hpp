@@ -16,6 +16,8 @@ private:
 public:
 // initialise player level as 1 with 0 xp
     PlayerLevel() : level(1), xp(0) {}
+    PlayerLevel(int lvl, int experience) : level(lvl), xp(experience) {}
+
 
 void addXP(int amount) {
         xp += amount;

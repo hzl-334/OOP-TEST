@@ -12,6 +12,7 @@ using namespace std;
 class Ingredient {
 public:
     virtual string getName() const = 0;
+    virtual string getType() const = 0;
     virtual string getCategory() const = 0;
     virtual ~Ingredient() {}
 };
