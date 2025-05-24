@@ -1,0 +1,3 @@
+/Users/huanzhenlin/Library/CloudStorage/OneDrive-UniversityofAdelaide/OOP-TEST/build/CMakeFiles/PapasFreezeria.dir
+/Users/huanzhenlin/Library/CloudStorage/OneDrive-UniversityofAdelaide/OOP-TEST/build/CMakeFiles/edit_cache.dir
+/Users/huanzhenlin/Library/CloudStorage/OneDrive-UniversityofAdelaide/OOP-TEST/build/CMakeFiles/rebuild_cache.dir
