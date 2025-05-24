@@ -80,27 +80,23 @@ public:
         int index = rand() % all.size();
         return all[index]();
     }
-    unique_ptr<Topping> getRandomToppingForLevel(int playerLevel) const {
-    vector<function<unique_ptr<Topping>()>> available;
+    std::vector<std::string> getToppingNamesForLevel(int level) const {
+    std::vector<std::string> result;
 
     for (const auto& f : fruitOptions) {
-        auto topping = f();  // create one temporarily to check unlockLevel
-        if (playerLevel >= topping->getUnlockLevel()) {
-            available.push_back([f]() { return f(); });
+        auto topping = f();
+        if (topping->getUnlockLevel() == level) {
+            result.push_back(topping->getName());
         }
     }
 
     for (const auto& s : sweetOptions) {
         auto topping = s();
-        if (playerLevel >= topping->getUnlockLevel()) {
-            available.push_back([s]() { return s(); });
+        if (topping->getUnlockLevel() == level) {
+            result.push_back(topping->getName());
         }
     }
 
-    if (available.empty()) return nullptr;
-
-    int index = rand() % available.size();
-    return available[index]();
+    return result;
 }
-
 };
