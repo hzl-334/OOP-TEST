@@ -27,6 +27,7 @@ private:
     std::string getRandom(const std::vector<std::string>& options) {
         return options[rand() % options.size()];
     }
+    
 
 public:
     Customer(std::string name, std::string debutType, std::string debutCondition)
@@ -45,5 +46,9 @@ public:
         std::string size = getRandom(sizeOptions);
         auto topping = toppingList.getRandomTopping();
         order = std::make_unique<Order>(flavor, std::move(topping), size);
+    }
+    
+    void overrideFlavorOptions(const vector<string>& newOptions) {
+    flavorOptions = newOptions;
     }
 };
