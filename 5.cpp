@@ -18,6 +18,8 @@ int Customer::nextID = 1;
 class Game {
 private:
     int currentDay = 1;
+    int customersServedToday = 0;
+    int customersExpectedToday = 3;
     int maxDays = 5;
     vector<string> allFlavors = {"Vanilla", "Chocolate", "Strawberry", "Mint", "Caramel", "Blueberry"};
     vector<string> unlockedFlavors = {"Vanilla", "Chocolate", "Strawberry"};
@@ -60,6 +62,23 @@ private:
         return customer;
     }
 
+    int getExpectedCustomers(int level) {
+        if (level == 1) return 3;
+        else if (level == 2) return 4;
+        else return 5 + (level - 2);  // Example: increase by 1 each level after 2
+    }
+
+    void endDay() {
+        cout << "\n✅ Day " << currentDay << " completed!\n";
+
+        // Flavor unlock every 2 days
+        if (currentDay % 2 == 0 && unlockedFlavors.size() < allFlavors.size()) {
+            unlockNewFlavor();
+        }
+
+        currentDay++;
+    }
+
 public:
     void play() {
         srand(time(0));
@@ -67,10 +86,12 @@ public:
 
         while (currentDay <= maxDays) {
             cout << "\n===== Day " << currentDay << " =====\n";
-            int numCustomers = 3 + currentDay; // Increase customer count each day
+            customersServedToday = 0;
+            customersExpectedToday = getExpectedCustomers(playerLevel.getLevel());
+
             vector<Customer> customers;
 
-            for (int i = 0; i < numCustomers; ++i) {
+            for (int i = 0; i < customersExpectedToday; ++i) {
                 string name = "Customer" + to_string(i + 1);
                 string debutType = (i == 0 && currentDay == 1) ? "Tutorial" : "Standard";
                 customers.push_back(generateCustomer(name, debutType, "Day " + to_string(currentDay)));
@@ -92,13 +113,11 @@ public:
                 if (score == 3) cout << "Perfect sundae! Great job!\n";
                 else if (score == 2) cout << "Almost perfect!\n";
                 else cout << "Better luck next time.\n";
+
+                customersServedToday++;
             }
 
-            if (currentDay % 2 == 0 && unlockedFlavors.size() < allFlavors.size()) {
-                unlockNewFlavor();
-            }
-
-            currentDay++;
+            endDay();  // Ends the day after all customers are served
         }
 
         cout << "\nThanks for playing! You reached level " << playerLevel.getLevel() << "!\n";
