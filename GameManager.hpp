@@ -10,6 +10,7 @@
 #include "Order.hpp"
 #include "DayManager.hpp"
 #include "Topping.hpp"
+#include "Unlock.hpp"
 class GameManager {
 private:
     int currentDay = 1;

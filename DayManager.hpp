@@ -10,6 +10,7 @@
 #include "Customer.hpp"
 #include "Order.hpp"
 #include "GameManager.hpp"
+#include "Unlock.hpp"
 
 class DayManager {
 private:
@@ -79,13 +80,11 @@ int oldLevel = playerLevel.getLevel();
     std::cout << "You scored: " << score << "/3\n";
 
     int previousLevel = playerLevel.getLevel();
-
     playerLevel.addXP(score * 40);
-    playerLevel.showStatus();
-
     int currentLevel = playerLevel.getLevel();
+    playerLevel.showStatus();
     if (currentLevel > previousLevel) {
-        showNewToppingUnlocks(previousLevel, currentLevel);
+        showNewToppingUnlocks(previousLevel, currentLevel,toppingList);
     }
 
     if (score == 3) std::cout << "Perfect sundae!\n";
